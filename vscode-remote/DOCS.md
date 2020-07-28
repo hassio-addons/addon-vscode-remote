@@ -168,13 +168,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 [contributors]: https://github.com/hassio-addons/addon-vscode-remote/graphs/contributors
+[debian-packages]: https://packages.debian.com
 [discord-ha]: https://discord.gg/c5DvZ4e
 [discord]: https://discord.me/hassioaddons
 [forum]: https://community.home-assistant.io/?u=frenck
 [frenck]: https://github.com/frenck
+[github-ssh]: https://help.github.com/articles/connecting-to-github-with-ssh/
 [issue]: https://github.com/hassio-addons/addon-vscode-remote/issues
 [keepchangelog]: http://keepachangelog.com/en/1.0.0/
 [reddit]: https://reddit.com/r/homeassistant
 [releases]: https://github.com/hassio-addons/addon-vscode-remote/releases
 [semver]: http://semver.org/spec/v2.0.0
-[debian-packages]: https://packages.debian.com
