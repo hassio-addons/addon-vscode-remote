@@ -1,0 +1,24 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Home Assistant Community Add-on: VSCode Remote
+# Runs the SSH daemon
+# ==============================================================================
+declare -a options
+
+bashio::log.info 'Starting the SSH Daemon for VSCode...'
+
+# Default options
+options+=(-D)
+options+=(-e)
+
+# Enable debug mode on the SSH daemon
+if bashio::debug; then
+  options+=(-d)
+fi
+
+# Ensure needed folders exists
+mkdir -p /run/sshd
+chmod -R 755 /run/sshd
+
+# Start the SSH daemon
+exec /usr/sbin/sshd "${options[@]}" < /dev/null

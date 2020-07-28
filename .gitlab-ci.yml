@@ -1,0 +1,13 @@
+---
+include: https://raw.githubusercontent.com/hassio-addons/organization/master/gitlabci/addon.yml
+
+variables:
+  ADDON_GITHUB_REPO: "hassio-addons/addon-vscode-remote"
+  ADDON_SLUG: "vscode-remote"
+  ADDON_TARGET: "vscode-remote"
+
+  ADDON_AARCH64_BASE: "hassioaddons/debian-base-aarch64:3.2.1"
+  ADDON_AMD64_BASE: "hassioaddons/debian-base-amd64:3.2.1"
+  ADDON_ARMHF_BASE: "hassioaddons/debian-base-armhf:3.2.1"
+  ADDON_ARMV7_BASE: "hassioaddons/debian-base-armv7:3.2.1"
+  ADDON_I386_BASE: "hassioaddons/debian-base-i386:3.2.1"

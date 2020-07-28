@@ -1,0 +1,16 @@
+AcceptEnv LANG LC_*
+AllowAgentForwarding yes
+AllowTcpForwarding yes
+AuthorizedKeysFile /etc/ssh/authorized_keys ~/.ssh/authorized_keys
+Banner none
+ChallengeResponseAuthentication no
+HostKey /data/ssh_host_ed25519_key
+HostKey /data/ssh_host_rsa_key
+PasswordAuthentication no
+PermitRootLogin yes
+Port 22
+PrintMotd no
+StreamLocalBindUnlink yes
+Subsystem       sftp    /usr/lib/openssh/sftp-server
+UsePAM yes
+X11Forwarding yes
