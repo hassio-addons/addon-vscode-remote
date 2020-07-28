@@ -14,6 +14,9 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Copy Python requirements file
 COPY requirements.txt /tmp/requirements.txt
 
+# Copy in extensions list
+COPY vscode.extensions /root/vscode.extensions
+
 # Setup base system
 ARG BUILD_ARCH=amd64
 # hadolint ignore=SC2181
@@ -22,6 +25,7 @@ RUN \
     \
     && apt-get install -y --no-install-recommends \
         ack=2.24-1 \
+        bsdtar=3.3.3-4+deb10u1 \
         build-essential=12.6 \
         colordiff=1.0.18-1 \
         git=1:2.20.1-2+deb10u3 \
@@ -38,12 +42,36 @@ RUN \
         python3-dev=3.7.3-1 \
         python3=3.7.3-1 \
         wget=1.20.1-1.1 \
+        uuid-runtime=2.33.1-0.1 \
         zsh=5.7.1-1 \
     \
     && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
     && locale-gen \
     \
     && curl https://bootstrap.pypa.io/get-pip.py | python3 \
+    \
+    && mkdir -p /root/.vscode-server/extensions \
+    && uuid=$(uuidgen) \
+    && while read -r ext; do \
+        extention="${ext%%#*}" \
+        vendor="${extention%%.*}"; \
+        slug="${extention#*.}"; \
+        version="${ext##*#}"; \
+        \
+        echo "Installing vscode extension: ${slug} by ${vendor} @ ${version} "; \
+        \
+        echo "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${vendor}/vsextensions/${slug}/${version}/vspackage"; \
+        curl -JL --retry 5 -o "/tmp/${extention}-${version}.vsix" \
+            -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" \
+            -H "x-market-user-id: ${uuid}" \
+            "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${vendor}/vsextensions/${slug}/${version}/vspackage"; \
+        mkdir -p "//root/.vscode-server/extensions/${extention}-${version}"; \
+        bsdtar --strip-components=1 -xf "/tmp/${extention}-${version}.vsix" \
+                    -C "/root/.vscode-server/extensions/${extention}-${version}" extension; \
+        [ $? -ne 0 ] && exit 1; \
+        sleep 1; \
+    done < /root/vscode.extensions \
+    && ls -la /root/.vscode-server/extensions/ \
     \
     && curl -L -s -o /usr/bin/ha \
         "https://github.com/home-assistant/cli/releases/download/4.3.0/ha_${BUILD_ARCH}" \
@@ -67,8 +95,10 @@ RUN \
     && pip3 install --no-cache-dir -r /tmp/requirements.txt \
     \
     && apt-get purge -y --auto-remove \
+        bsdtar \
         build-essential \
         python3-dev \
+        uuid-runtime \
     \
     && find /usr/local/lib/python3.7/ -type d -name tests -depth -exec rm -rf {} \; \
     && find /usr/local/lib/python3.7/ -type d -name test -depth -exec rm -rf {} \; \
