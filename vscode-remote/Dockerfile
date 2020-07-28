@@ -22,6 +22,7 @@ RUN \
     \
     && apt-get install -y --no-install-recommends \
         ack=2.24-1 \
+        build-essential=12.6 \
         colordiff=1.0.18-1 \
         git=1:2.20.1-2+deb10u3 \
         iputils-ping=3:20180629-2+deb10u1 \
@@ -66,6 +67,7 @@ RUN \
     && pip3 install --no-cache-dir -r /tmp/requirements.txt \
     \
     && apt-get purge -y --auto-remove \
+        build-essential \
         python3-dev \
     \
     && find /usr/local/lib/python3.7/ -type d -name tests -depth -exec rm -rf {} \; \
