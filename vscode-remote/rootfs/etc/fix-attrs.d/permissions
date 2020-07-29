@@ -1,0 +1,5 @@
+/etc false root 0644 0755
+/etc/ssh false root 0644 0755
+/etc/ssh/authorized_keys false root 0644 0755
+/usr/bin/ha false root 0755 0755
+/usr/bin/hassio false root 0755 0755
