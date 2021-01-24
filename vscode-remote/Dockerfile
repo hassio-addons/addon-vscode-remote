@@ -1,4 +1,4 @@
-ARG BUILD_FROM=hassioaddons/debian-base:3.2.1
+ARG BUILD_FROM=ghcr.io/hassio-addons/debian-base/amd64:4.1.0
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
@@ -31,13 +31,13 @@ RUN \
         git=1:2.20.1-2+deb10u3 \
         iputils-ping=3:20180629-2+deb10u1 \
         locales=2.28-10 \
-        mariadb-client=1:10.3.22-0+deb10u1 \
+        mariadb-client=1:10.3.27-0+deb10u1 \
         mosquitto-clients=1.5.7-1+deb10u1 \
         net-tools=1.60+git20180626.aebd88e-1 \
-        nmap=7.70+dfsg1-6 \
+        nmap=7.70+dfsg1-6+deb10u1 \
         openssh-client=1:7.9p1-10+deb10u2 \
         openssh-server=1:7.9p1-10+deb10u2 \
-        openssl=1.1.1d-0+deb10u3 \
+        openssl=1.1.1d-0+deb10u4 \
         pwgen=2.08-1 \
         python3-dev=3.7.3-1 \
         python3=3.7.3-1 \
