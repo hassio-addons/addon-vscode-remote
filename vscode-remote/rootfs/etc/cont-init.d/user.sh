@@ -3,10 +3,18 @@
 # Home Assistant Community Add-on: VSCode Remote
 # Persists user settings and installs custom user packages.
 # ==============================================================================
+readonly -a DIRECTORIES=(addons backup config share ssl)
 readonly GIT_USER_PATH=/data/git
+readonly HOME_ASSISTANT_PROFILE_D_FILE=/etc/profile.d/homeassistant.sh
 readonly SSH_USER_PATH=/data/.ssh
 readonly ZSH_HISTORY_FILE=/root/.zsh_history
 readonly ZSH_HISTORY_PERSISTANT_FILE=/data/.zsh_history
+
+# Links some common directories to the user's home folder for convenience
+for dir in "${DIRECTORIES[@]}"; do
+    ln -s "/${dir}" "${HOME}/${dir}" \
+        || bashio::log.warning "Failed linking common directory: ${dir}"
+done
 
 # Store SSH settings in add-on data folder
 if ! bashio::fs.directory_exists "${SSH_USER_PATH}"; then
@@ -29,6 +37,10 @@ chmod 600 "$ZSH_HISTORY_PERSISTANT_FILE" \
 
 ln -s -f "$ZSH_HISTORY_PERSISTANT_FILE" "$ZSH_HISTORY_FILE" \
     || bashio::exit.nok 'Failed linking the persistant ZSH history file'
+
+sed -i "1iexport SUPERVISOR_TOKEN=\"${SUPERVISOR_TOKEN}\"" \
+    "${HOME_ASSISTANT_PROFILE_D_FILE}" \
+        || bashio::exit.nok 'Failed to export Supervisor API token'
 
 # Store user GIT settings in add-on data folder
 if ! bashio::fs.directory_exists "${GIT_USER_PATH}"; then
